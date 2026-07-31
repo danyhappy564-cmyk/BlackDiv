@@ -74,7 +74,8 @@ public class BlackDivServer(
             "blackDivAssault",
             "blackDivBreacher",
             "blackDivSupport",
-            "bossWedge"
+            "bossWedge",
+            "blackDivIb"
         };
 
         var typeDictionary = new Dictionary<int, string>()
@@ -84,6 +85,7 @@ public class BlackDivServer(
             { 848422, "blackDivBreacher" },
             { 848423, "blackDivSupport" },
             { 848424 , "bossWedge" },
+            { 848426 , "blackDivIb" },
         };
 
         var assembly = Assembly.GetExecutingAssembly();
@@ -150,7 +152,9 @@ public class BlackDivFaction(
                 (WildSpawnType)848420,
                 (WildSpawnType)848421,
                 (WildSpawnType)848422,
-                (WildSpawnType)848423
+                (WildSpawnType)848423,
+                (WildSpawnType)848424,
+                (WildSpawnType)848426
             },
             RevengeAfterRaids = false
         };

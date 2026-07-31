@@ -115,7 +115,7 @@ namespace BlackDiv.Prepatch
             // Wedge
             bot = new CustomWildSpawnType(848424, "bossWedge", "Boss", baseBrainInt, true, true, false);
 
-            bot.SetCountAsBossForStatistics(false);
+            bot.SetCountAsBossForStatistics(true);
             bot.SetShouldUseFenceNoBossAttack(false, false);
             bot.SetExcludedDifficulties(new List<int> { 0, 2, 3 });
 
@@ -123,6 +123,27 @@ namespace BlackDiv.Prepatch
             {
                 Name = "Wedge",
                 Description = "A hyper-lethal leader within Black Division.",
+                Section = "Black Division",
+                BaseBrain = "PMC",
+                BrainsToApply = brains,
+                LayersToRemove = layers
+            };
+
+            bot.SetSAINSettings(settings);
+
+            CustomWildSpawnTypeManager.RegisterWildSpawnType(bot, assembly);
+            
+            // BD IB
+            bot = new CustomWildSpawnType(848426, "blackDivIb", "BlackDiv", baseBrainInt, true, true, false);
+
+            bot.SetCountAsBossForStatistics(false);
+            bot.SetShouldUseFenceNoBossAttack(false, false);
+            bot.SetExcludedDifficulties(new List<int> { 0, 2, 3 });
+
+            settings = new SAINSettings(bot.WildSpawnTypeValue)
+            {
+                Name = "Black Division Raider",
+                Description = "A member of Black Division that is a part of a raiding party.",
                 Section = "Black Division",
                 BaseBrain = "PMC",
                 BrainsToApply = brains,

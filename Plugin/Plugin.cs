@@ -28,7 +28,7 @@ namespace BlackDiv
             //new BotsControllerInitPatch().Enable();
             new BDNvgPatch().Enable();
 
-            var bdEnums = new List<int> { 848420, 848421, 848422, 848423, 848424 }
+            var bdEnums = new List<int> { 848420, 848421, 848422, 848423, 848424, 848426 }
                 .ConvertAll(x => (WildSpawnType)x);
             
             MonoBehaviourSingleton<HuntManager>.Instance.AddHuntRoles(bdEnums, [WildSpawnType.pmcUSEC, WildSpawnType.pmcBEAR]);

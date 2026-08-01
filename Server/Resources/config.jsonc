@@ -9,6 +9,7 @@
     "minHuntSize": 3,
     "maxHuntSize": 5,
     "labsGateChances": 20,
+    // labsStartChance now spawns Wedge
     "labsStartChance": 15,
     "huntMaps": [
       "bigmap",

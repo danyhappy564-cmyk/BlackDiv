@@ -1,36 +1,26 @@
-﻿{
+{
   "appearance": {
     "body": {
-      "688ddcdd0551c30a1700d75e": 1,
-      "688de6ea74514d35fd003554": 1,
-      "688dec55152c0d07670564af": 1,
-      "688df7e020025952eb0e0628": 1
+      "69e2427109707df7660efa26": 1
     },
     "feet": {
-      "688dddcd152c0d0767056496": 1,
-      "688de71374514d35fd003556": 1,
-      "688dec1429e9479b850276b9": 1,
-      "688df7b620025952eb0e0626": 1
+      "69e24294e0d3dc5cfd031434": 1
     },
     "hands": {
       "5cc2e68f14c02e28b47de290": 1
     },
     "head": {
-      "5cde96047d6c8b20b577f016": 1,
-      "5fdb5950f5264a66150d1c6e": 1,
-      "60a6aa8fd559ae040d0d951f": 1,
-      "60a6aaad42fd2735e4589978": 1
+      "69e24393d10363e6f90064d0": 1
     },
     "voice": {
-      "6899fcdea469e729c40cbbde": 1,
-      "6899fff4c17f776ecb07fafd": 1
+      "69c68f1a8f75eda7610edac4": 1
     }
   },
   "chances": {
     "equipment": {
       "ArmBand": 0,
       "ArmorVest": 14,
-      "Backpack": 20,
+      "Backpack": 0,
       "Earpiece": 100,
       "Eyewear": 69,
       "FaceCover": 100,
@@ -279,8 +269,8 @@
         "RETURN_TO_ATTACK_AFTER_AMBUSH_MAX": 50,
         "RETURN_TO_ATTACK_AFTER_AMBUSH_MIN": 20,
         "RUN_COVER_IF_CAN_AND_NO_ENEMIES": false,
-        "RUN_IF_FAR": 30,
-        "RUN_IF_FAR_SQRT": 900,
+        "RUN_IF_FAR": 10,
+        "RUN_IF_FAR_SQRT": 225,
         "SHOOT_NEAR_SEC_PERIOD": 0.5,
         "SHOOT_NEAR_TO_LEAVE": 2,
         "SOUND_TO_GET_SPOTTED": 2,
@@ -2166,8 +2156,8 @@
     },
     "reward": {
       "normal": {
-        "max": 425,
-        "min": 300
+        "max": 1200,
+        "min": 1200
       }
     },
     "standingForKill": {
@@ -2176,167 +2166,27 @@
     "useSimpleAnimator": false
   },
   "firstName": [
-    "Stuff",
-    "Abyss",
-    "Aftershock",
-    "Alloy",
-    "Anvil",
-    "Atlas",
-    "Banshee",
-    "Bastille",
-    "Bastion",
-    "Behemoth",
-    "Blackout",
-    "Blizzard",
-    "Broadsword",
-    "Carbon",
-    "Cerberus",
-    "Chromium",
-    "Cipher",
-    "Circuit",
-    "Claymore",
-    "Cobalt",
-    "Colossus",
-    "Crucible",
-    "Cutlass",
-    "Cyclone",
-    "Dagger",
-    "Derelict",
-    "Dirk",
-    "Domino",
-    "Domont",
-    "Dusk",
-    "Dynamo",
-    "Eclipse",
-    "Ember",
-    "Exodus",
-    "Fang",
-    "Firestorm",
-    "Forerunner",
-    "Forge",
-    "Fortress",
-    "Fusion",
-    "Garrison",
-    "Gauntlet",
-    "Gladius",
-    "Goliath",
-    "Graphite",
-    "Hailstorm",
-    "Halberd",
-    "Helios",
-    "Hex",
-    "Hollow",
-    "Hunter",
-    "Inferno",
-    "Invader",
-    "Ironside",
-    "Javelin",
-    "Jean",
-    "Lancer",
-    "Laser",
-    "Leviathan",
-    "Mace",
-    "Magnet",
-    "Magnus",
-    "Malice",
-    "Mantis",
-    "Midnight",
-    "Monsoon",
-    "Morbid",
-    "Nemesis",
-    "Nether",
-    "Neutron",
-    "Nightfall",
-    "Nocturne",
-    "Nomad",
-    "Oblivion",
-    "Obsidian",
-    "Ocelot",
-    "Omen",
-    "Onyx",
-    "Oracle",
-    "Outlaw",
-    "Outrider",
-    "Paladin",
-    "Palisade",
-    "Pathfinder",
-    "Patriot",
-    "Phantom",
-    "Photon",
-    "Pike",
-    "Pioneer",
-    "Plasma",
-    "Praetor",
-    "Prophet",
-    "Pursuer",
-    "Quake",
-    "Raiden",
-    "Raider",
-    "Ranger",
-    "Rapier",
-    "Ravenous",
-    "Reaper",
-    "Revenant",
-    "Rift",
-    "Saber",
-    "Scimitar",
-    "Scout",
-    "Seeker",
-    "Sentinel",
-    "Shade",
-    "Solid",
-    "Spatha",
-    "Spearhead",
-    "Specter",
-    "Spire",
-    "Steelborn",
-    "Stormfront",
-    "Stronghold",
-    "Tempest",
-    "Thunder",
-    "Titan",
-    "Titanium",
-    "Tomahawk",
-    "Tornado",
-    "Tracker",
-    "Tremor",
-    "Trident",
-    "Tungsten",
-    "Umbra",
-    "Vanguard",
-    "Vault",
-    "Vector",
-    "Venom",
-    "Vertigo",
-    "Viper",
-    "Volt",
-    "Vortex",
-    "Waraxe",
-    "Warden",
-    "Warhammer",
-    "Watcher",
-    "Wildfire",
-    "Wraith"
+    "Wedge"
   ],
   "generation": {
     "items": {
       "backpackLoot": {
         "weights": {
-          "0": 10,
-          "1": 5,
-          "2": 3,
-          "3": 1,
-          "4": 0,
-          "5": 0,
-          "6": 0,
+          "0": 1,
+          "1": 2,
+          "2": 5,
+          "3": 3,
+          "4": 1,
+          "5": 1,
+          "6": 1,
           "7": 0
         },
         "whitelist": []
       },
       "currency": {
         "weights": {
-          "0": 30,
-          "1": 9,
+          "0": 0,
+          "1": 5,
           "2": 1
         },
         "whitelist": []
@@ -2352,8 +2202,7 @@
       "drugs": {
         "weights": {
           "0": 1,
-          "1": 2,
-          "2": 3
+          "1": 4
         },
         "whitelist": []
       },
@@ -2367,8 +2216,8 @@
       },
       "grenades": {
         "weights": {
-          "0": 2,
-          "1": 2,
+          "0": 1,
+          "1": 1,
           "2": 3,
           "3": 0,
           "4": 0,
@@ -2378,9 +2227,9 @@
       },
       "healing": {
         "weights": {
-          "0": 1,
-          "1": 4,
-          "2": 3
+          "0": 0,
+          "1": 1,
+          "2": 2
         },
         "whitelist": []
       },
@@ -2397,8 +2246,8 @@
       "pocketLoot": {
         "weights": {
           "0": 9,
-          "1": 2,
-          "2": 1,
+          "1": 7,
+          "2": 4,
           "3": 0,
           "4": 0
         },
@@ -2413,18 +2262,14 @@
       "stims": {
         "weights": {
           "0": 1,
-          "1": 5,
-          "2": 1
+          "1": 2,
+          "2": 2
         },
         "whitelist": []
       },
       "vestLoot": {
         "weights": {
-          "0": 1,
-          "1": 3,
-          "2": 5,
-          "3": 1,
-          "4": 1
+          "0": 1
         },
         "whitelist": []
       }
@@ -2478,36 +2323,36 @@
   },
   "inventory": {
     "Ammo": {
-      
+
     },
     "equipment": {
       "ArmBand": {},
       "ArmorVest": {
-        
+
       },
       "Backpack": {
-        
+
       },
       "Earpiece": {
-        
+
       },
       "Eyewear": {
-        
+
       },
       "FaceCover": {
-        
+
       },
       "FirstPrimaryWeapon": {
-        
+
       },
       "Headwear": {
-       
+
       },
       "Holster": {
-        
+
       },
       "Pockets": {
-        "64cbd95a29b9b4283e216ff5": 1
+        "5af99e9186f7747c447120b8": 1
       },
       "Scabbard": {},
       "SecondPrimaryWeapon": {},
@@ -2515,58 +2360,22 @@
         "5c0a794586f77461c458f892": 1
       },
       "TacticalVest": {
-        
+
       }
     },
     "items": {
-      "Backpack": {
-        "5696686a4bdc2da3298b456a": 2441,
-        "569668774bdc2da2298b4568": 982,
-        "590c37d286f77443be3d7827": 1714,
-        "590c392f86f77444754deb29": 820,
-        "590c621186f774138d11ea29": 795,
-        "5c0e530286f7747fa1419862": 84,
-        "5c0e531286f7747fa54205c2": 80,
-        "5c0e531d86f7747fa23f4d42": 211,
-        "5c0e533786f7747fa23f4d47": 79,
-        "5c0e534186f7747fa1419867": 76,
-        "5c10c8fd86f7743d7d706df3": 85,
-        "5c12613b86f7743bbe2c3f76": 100,
-        "5ed515c8d380ab312177c0fa": 85,
-        "5ed515e03a40a50460332579": 50,
-        "5ed515ece452db0eb56fc028": 49,
-        "5ed515f6915ec335206e4152": 32,
-        "5ed5160a87bb8443d10680b5": 48,
-        "5ed51652f6c34d2cc26336a1": 42,
-        "5fca138c2a7b221b2852a5c6": 18,
-        "5fca13ca637ee0341a484f46": 34,
-        "62a0a124de7ac81993580542": 1659,
-        "62a0a16d0b9d3c46de5b6e97": 811,
-        "637b612fb7afa97bfc3d7005": 39,
-        "637b6179104668754b72f8f5": 47,
-        "637b620db7afa97bfc3d7009": 46,
-        "637b6251104668754b72f8f9": 19,
-        "66507eabf5ddb0818b085b68": 16,
-        "6389c8c5dbfd5e4b95197e6b": 50
-      },
+      "Backpack": {},
       "Pockets": {
-        "619256e5f8af2c1a4e1f5d92": 10000,
-        "5448c1d04bdc2dff2f8b4569": 721,
-        "544fb3f34bdc2d03748b456a": 4179,
-        "5c10c8fd86f7743d7d706df3": 3785,
-        "5c0e533786f7747fa23f4d47": 3585,
-        "5a718b548dc32e000d46d262": 6801,
-        "5a718da68dc32e000d46d264": 1305,
-        "5c0d591486f7744c505b416f": 1960,
-        "5c920e902e221644f31c3c99": 6230,
-        "5cadc2e0ae9215051e1c21e7": 10000,
-        "5d6e6869a4b9361c140bcfde": 933,
-        "5df8f535bb49d91fb446d6b0": 998,
-        "5f3e77b26cda304dcc634057": 3959,
-        "5e8488fa988a8701445df1e4": 9940,
-        "60098ad7c2240c0fe85c570a": 10000,
-        "5c94bbff86f7747ee735c08f": 60,
-        "5c1d0f4986f7744bb01837fa": 3
+        "619cbf9e0a7c3a1a2731940a": 1,
+        "569668774bdc2da2298b4568": 100,
+        "5696686a4bdc2da3298b456a": 50,
+        "5c1d0c5f86f7744bb2683cf0": 6,
+        "5c1e495a86f7743109743dfb": 6,
+        "5c1d0efb86f7744baf2e7b7b": 6,
+        "5c1d0f4986f7744bb01837fa": 6,
+        "60098ad7c2240c0fe85c570a": 100,
+        "5c0e533786f7747fa23f4d47": 100,
+        "5c0e534186f7747fa1419867": 75
       },
       "SecuredContainer": {
         "54527a984bdc2d4e668b4567": 100000,
@@ -2608,7 +2417,47 @@
       },
       "SpecialLoot": {},
       "TacticalVest": {
-        "60098ad7c2240c0fe85c570a": 10000
+        "544a378f4bdc2d30388b4567": 534,
+        "544a37c44bdc2d25388b4567": 2750,
+        "55802d5f4bdc2dac148b458e": 10000,
+        "55d480c04bdc2d1d4e8b456a": 8471,
+        "55d481904bdc2d8c2f8b456a": 402,
+        "55d4887d4bdc2d962f8b4570": 10000,
+        "564ca9df4bdc2d35148b4569": 784,
+        "5894a05586f774094708ef75": 4987,
+        "59c1383d86f774290a37e0ca": 934,
+        "59d625f086f774661516605d": 10000,
+        "59d6272486f77466146386ff": 10000,
+        "59fafc5086f7740dbe19f6c3": 981,
+        "5a0060fc86f7745793204432": 9764,
+        "5a3501acc4a282000d72293a": 8498,
+        "5a718b548dc32e000d46d262": 402,
+        "5aaa4194e5b5b055d06310a5": 7215,
+        "5aaa5dfee5b5b000140293d3": 2445,
+        "5ac66bea5acfc43b321d4aec": 10000,
+        "5b7bef9c5acfc43d102852ec": 895,
+        "5b7c2d1d5acfc43d1028532a": 7360,
+        "5c05413a0db834001c390617": 1809,
+        "5c6d46132e221601da357d56": 8450,
+        "5c920e902e221644f31c3c99": 259,
+        "5cadc2e0ae9215051e1c21e7": 3939,
+        "5d1340b3d7ad1a0b52682ed7": 8697,
+        "5d1340cad7ad1a0b0b249869": 9728,
+        "5f3e77b26cda304dcc634057": 181,
+        "5fb651dc85f90547f674b6f4": 2353,
+        "60098ad7c2240c0fe85c570a": 100000,
+        "61840bedd92c473c77021635": 2340,
+        "61840d85568c120fdd2962a5": 10000,
+        "6193d3149fb0c665d5490e32": 631,
+        "62307b7b10d2321fa8741921": 4688,
+        "62e7c98b550c8218d602cbb4": 7188,
+        "65293c38fc460e50a509cb25": 288,
+        "66866f4ec3d473265104f381": 10000,
+        "668fe5c5f35310705d02b696": 475,
+        "669fa435803b94fb5d0e3a76": 283,
+        "66ffaab91f7492c901027bb8": 251,
+        "676176b762e0497044079f49": 1,
+        "6761770e48fa5c377e06fc3c": 21
       }
     },
     "mods": {}
@@ -2617,8 +2466,8 @@
   "skills": {
     "Common": {
       "BotReload": {
-        "max": 500,
-        "min": 100
+        "max": 3100,
+        "min": 3100
       },
       "Endurance": {
         "max": 5100,

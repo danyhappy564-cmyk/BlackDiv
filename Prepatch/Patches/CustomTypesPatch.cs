@@ -111,8 +111,50 @@ namespace BlackDiv.Prepatch
             bot.SetSAINSettings(settings);
 
             CustomWildSpawnTypeManager.RegisterWildSpawnType(bot, assembly);
+            
+            // Wedge
+            bot = new CustomWildSpawnType(848424, "bossWedge", "Boss", baseBrainInt, true, true, false);
 
-            CustomWildSpawnTypeManager.AddSuitableGroup(new List<int> { 848420, 848421, 848422, 848423 });
+            bot.SetCountAsBossForStatistics(true);
+            bot.SetShouldUseFenceNoBossAttack(false, false);
+            bot.SetExcludedDifficulties(new List<int> { 0, 2, 3 });
+
+            settings = new SAINSettings(bot.WildSpawnTypeValue)
+            {
+                Name = "Wedge",
+                Description = "A hyper-lethal leader within Black Division.",
+                Section = "Black Division",
+                BaseBrain = "PMC",
+                BrainsToApply = brains,
+                LayersToRemove = layers
+            };
+
+            bot.SetSAINSettings(settings);
+
+            CustomWildSpawnTypeManager.RegisterWildSpawnType(bot, assembly);
+            
+            // BD IB
+            bot = new CustomWildSpawnType(848426, "blackDivIb", "BlackDiv", baseBrainInt, true, true, false);
+
+            bot.SetCountAsBossForStatistics(false);
+            bot.SetShouldUseFenceNoBossAttack(false, false);
+            bot.SetExcludedDifficulties(new List<int> { 0, 2, 3 });
+
+            settings = new SAINSettings(bot.WildSpawnTypeValue)
+            {
+                Name = "Black Division Raider",
+                Description = "A member of Black Division that is a part of a raiding party.",
+                Section = "Black Division",
+                BaseBrain = "PMC",
+                BrainsToApply = brains,
+                LayersToRemove = layers
+            };
+
+            bot.SetSAINSettings(settings);
+
+            CustomWildSpawnTypeManager.RegisterWildSpawnType(bot, assembly);
+
+            CustomWildSpawnTypeManager.AddSuitableGroup(new List<int> { 848420, 848421, 848422, 848423, 848424, 848426 });
         }
 
     }

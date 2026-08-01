@@ -60,16 +60,16 @@ public class SpawnController(
             logger.Info("Adding Black Division spawn to Labs.");
             var normalSpawn = new BossLocationSpawn
             {
-                BossName = "blackDivAssault",
+                BossName = "bossWedge",
                 BossChance = mainConfig.spawns.labsStartChance,
                 BossDifficulty = "normal",
-                BossEscortAmount = "2,2,2,3,3,4",
+                BossEscortAmount = "3,3,3,4,4,6",
                 BossEscortDifficulty = "normal",
-                BossEscortType = "blackDivAssault",
+                BossEscortType = "blackDivIb",
                 IsBossPlayer = false,
                 BossZone = "BotZoneFloor2,BotZoneFloor1,BotZoneBasement",
                 Delay = 0,
-                ForceSpawn = false,
+                ForceSpawn = true,
                 IgnoreMaxBots = false,
                 IsRandomTimeSpawn = false,
                 SpawnMode = ["regular", "pve"],

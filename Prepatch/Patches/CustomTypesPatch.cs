@@ -154,7 +154,7 @@ namespace BlackDiv.Prepatch
 
             CustomWildSpawnTypeManager.RegisterWildSpawnType(bot, assembly);
 
-            CustomWildSpawnTypeManager.AddSuitableGroup(new List<int> { 848420, 848421, 848422, 848423, 848424 });
+            CustomWildSpawnTypeManager.AddSuitableGroup(new List<int> { 848420, 848421, 848422, 848423, 848424, 848426 });
         }
 
     }

@@ -18,7 +18,7 @@ public record ModMetadata : AbstractModMetadata
     public override string Name { get; init; } = "Black Division [REDACTED] Home";
     public override string Author { get; init; } = "TacticalToaster";
     public override List<string>? Contributors { get; init; } = new() { };
-    public override SemanticVersioning.Version Version { get; init; } = new(2, 0, 0);
+    public override SemanticVersioning.Version Version { get; init; } = new(1, 2, 0);
     public override SemanticVersioning.Range SptVersion { get; init; } = new("~4.0.0");
     public override List<string>? Incompatibilities { get; init; }
     public override Dictionary<string, SemanticVersioning.Range>? ModDependencies { get; init; } = new()
@@ -64,7 +64,8 @@ public class BlackDivServer(
     MoreBotsServer.Services.LoadoutService loadoutService,
     WTTServerCommonLib.WTTServerCommonLib commonLib,
     IReadOnlyList<SptMod> modList,
-    SpawnController spawnController
+    SpawnController spawnController,
+    DatabaseService database
 ) : IOnLoad
 {
     public async Task OnLoad()
@@ -100,6 +101,15 @@ public class BlackDivServer(
         {
             await commonLib.CustomBotLoadoutService.CreateCustomBotLoadouts(assembly,
                 Path.Join("db", "ModBotLoadouts", "Armory"));
+        }
+
+        if (modList.Any(mod => mod.ModMetadata.ModGuid == "com.manimal.csgas"))
+        {
+            database.GetBots().Types["bosswedge"]?.BotInventory.Items.Pockets.Add("6a5d6a5f4ed8c025a0a2cff0", 10000);
+            database.GetBots().Types["bosswedge"]?.BotInventory.Items.SecuredContainer.Add("6a5d6a5f4ed8c025a0a2cff0", 10000);
+            
+            database.GetBots().Types["blackdivib"]?.BotInventory.Items.Pockets.Add("6a5d6a5f4ed8c025a0a2cff0", 10000);
+            database.GetBots().Types["blackdivib"]?.BotInventory.Items.SecuredContainer.Add("6a5d6a5f4ed8c025a0a2cff0", 10000);
         }
 
         customBotTypeService.AddCustomWildSpawnTypeNames(typeDictionary);
@@ -199,7 +209,7 @@ public class CustomDynamicRouter : DynamicRouter
     }
 }
 
-[Injectable]
+[Injectable(TypePriority = OnLoadOrder.PostSptModLoader)]
 public class CustomStaticRouter : StaticRouter
 {
     private static HttpResponseUtil _httpResponseUtil;

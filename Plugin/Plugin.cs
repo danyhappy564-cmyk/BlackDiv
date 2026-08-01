@@ -4,7 +4,9 @@ using BepInEx.Logging;
 using BlackDiv.Patches;
 using System;
 using System.Collections.Generic;
+using DrakiaXYZ.BigBrain.Brains;
 using EFT;
+using MoreBotsAPI.Behavior.Layers;
 using MoreBotsAPI.Components;
 
 namespace BlackDiv
@@ -38,6 +40,12 @@ namespace BlackDiv
                 EPlayerSide.Usec,
                 EPlayerSide.Bear,
             });
+            
+            var brainList = new List<string>() { "PMC", "ExUsec", "Assault", "PmcUsec", "PmcBear", "PmcUSEC", "PmcBEAR" };
+            var typesList = new List<int>() { 848420, 848421, 848422, 848423, 848424, 848426 }.ConvertAll(x => (WildSpawnType)x);
+
+            BrainManager.AddCustomLayer(typeof(HuntTargetLayer), brainList, 10, typesList);
+            BrainManager.RemoveLayers(["AdvAssaultTarget"], brainList, typesList);
         }
     }
 }

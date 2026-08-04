@@ -33,7 +33,7 @@ public class SpawnController(
             var mainConfig = configController.ModConfig;
 
             var labs = locations.Laboratory;
-            labs.Base.BossLocationSpawn.RemoveAll(x => x.BossName != null && x.BossName.Contains("blackDiv"));
+            labs.Base.BossLocationSpawn.RemoveAll(x => x.BossName != null && (x.BossName.Contains("blackDiv") || x.BossName.Contains("bossWedge")));
             
             var gate = labs.Base.BossLocationSpawn.Find(x => x?.TriggerId?.ToString() == "autoId_00014_EXFIL");
             

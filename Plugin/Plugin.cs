@@ -11,7 +11,7 @@ using MoreBotsAPI.Components;
 
 namespace BlackDiv
 {
-    [BepInDependency("xyz.drakia.bigbrain", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("xyz.drakia.bigbrain")]
     [BepInDependency("me.sol.sain", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.morebotsapi.tacticaltoaster")]
     [BepInPlugin(ClientInfo.GUID, ClientInfo.PluginName, ClientInfo.Version)]

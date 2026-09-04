@@ -1,28 +1,34 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Comfort.Common;
 using EFT;
 using SPT.Reflection.Patching;
+using UnityEngine;
 
 namespace BlackDiv.Patches;
 
-// READ-ONLY DIAGNOSTIC. Dumps what BigBrain actually has registered once the raid has
-// started, so we can stop guessing at its internals.
+// READ-ONLY DIAGNOSTIC. Nothing here writes state: it reads BigBrain's registry and asks
+// each live bot what it already is. No layer is added, removed or toggled.
 //
-// Where we are: SainBrainLayerPatch successfully calls SAIN's
-// AddCustomLayersToBrainsAndRoles(["PMC"], BD roles) at raid start - it logs success and
-// throws nothing - yet BD/Wedge bots still show the vanilla "Pmc" layer in BigBrain's
-// overlay. SAIN already registered those same layer TYPES on the "PMC" brain scoped to
-// role pmcBot (its raider path), and BigBrain keeps its registrations in a Dictionary, so
-// the likely story is that our second registration of an already-registered layer type is
-// being dropped rather than merged. This prints the actual registry instead of theorising:
-// for every registered custom layer we log its type, priority, and whatever brain/role
-// collections it carries, all via reflection so nothing depends on BigBrain's exact
-// member shapes.
+// Where we are. SainBrainLayerPatch calls SAIN's AddCustomLayersToBrainsAndRoles(["PMC"],
+// BD roles) at raid start, logs success, throws nothing - and BD/Wedge still show the
+// vanilla "Pmc" layer. The first dump answered one question already: BigBrain keys its
+// registry by an auto-incrementing int id (9000, 9001, ...), not by layer type, so a
+// second registration of an already-registered type is NOT dropped. That kills the
+// "duplicate got ignored" theory and leaves two candidates:
 //
-// Nothing here writes any state - it only reads BrainManager's public accessors and
-// reflects over the returned objects.
+//   A) the layer is registered but BigBrain's role filter still doesn't match our bots
+//   B) the layer matches, but SAIN's own IsActive() bails because the bot has no SAIN
+//      BotComponent (CombatSoloLayer.IsActive() = GetBotComponent() && decision != None)
+//
+// So this prints both halves:
+//   - every registered LayerInfo whose brain list mentions PMC, with its type, priority,
+//     brains and roles (does 848420-848426 appear?)
+//   - for each live Black Division/Wedge bot: its brain name, its current active layer,
+//     and whether a SAIN BotComponent is attached at all
 internal class SainBrainDumpPatch : ModulePatch
 {
     private const BindingFlags Any =
@@ -38,48 +44,66 @@ internal class SainBrainDumpPatch : ModulePatch
     {
         try
         {
-            Type brainManager = AccessToolsTypeByName("DrakiaXYZ.BigBrain.Brains.BrainManager");
-            if (brainManager == null)
-            {
-                Plugin.LogSource.LogWarning("[BrainDump] BrainManager type not found");
-                return;
-            }
-
-            object layers = ReadMember(brainManager, null, "CustomLayersReadOnly")
-                            ?? ReadMember(brainManager, null, "CustomLayers");
-
-            // static members may hang off the singleton instead of the type
-            if (layers == null)
-            {
-                object instance = ReadMember(brainManager, null, "Instance");
-                if (instance != null)
-                {
-                    layers = ReadMember(brainManager, instance, "CustomLayersReadOnly")
-                             ?? ReadMember(brainManager, instance, "CustomLayers");
-                }
-            }
-
-            if (!(layers is IEnumerable enumerable))
-            {
-                Plugin.LogSource.LogWarning($"[BrainDump] custom layer collection unreadable (got: {layers?.GetType().FullName ?? "null"})");
-                return;
-            }
-
-            int count = 0;
-            foreach (object entry in enumerable)
-            {
-                count++;
-                Plugin.LogSource.LogWarning($"[BrainDump] {Describe(entry)}");
-            }
-            Plugin.LogSource.LogWarning($"[BrainDump] {count} registered custom layer entr(ies) total");
+            DumpRegistry();
         }
         catch (Exception e)
         {
-            Plugin.LogSource.LogWarning($"[BrainDump] failed: {e}");
+            Plugin.LogSource.LogWarning($"[BrainDump] registry dump failed: {e}");
+        }
+
+        // BD/Wedge spawn on triggers well after the raid starts, so the per-bot half has
+        // to keep looking rather than sampling once here.
+        try
+        {
+            if (UnityEngine.Object.FindObjectOfType<SainBotProbe>() == null)
+                new GameObject("BlackDiv_SainBotProbe").AddComponent<SainBotProbe>();
+        }
+        catch (Exception e)
+        {
+            Plugin.LogSource.LogWarning($"[BrainDump] probe attach failed: {e.Message}");
         }
     }
 
-    private static Type AccessToolsTypeByName(string fullName)
+    private static void DumpRegistry()
+    {
+        Type brainManager = FindType("DrakiaXYZ.BigBrain.Brains.BrainManager");
+        if (brainManager == null)
+        {
+            Plugin.LogSource.LogWarning("[BrainDump] BrainManager type not found");
+            return;
+        }
+
+        object layers = Read(brainManager, null, "CustomLayersReadOnly") ?? Read(brainManager, null, "CustomLayers");
+        if (!(layers is IEnumerable entries))
+        {
+            Plugin.LogSource.LogWarning("[BrainDump] custom layer collection unreadable");
+            return;
+        }
+
+        int total = 0, shown = 0;
+        foreach (object kvp in entries)
+        {
+            total++;
+            object info = Read(kvp.GetType(), kvp, "Value");
+            if (info == null) continue;
+
+            Type t = info.GetType();
+            string brains = Stringify(Read(t, info, "CustomLayerBrains") ?? Read(t, info, "brainNames"));
+            // only the PMC brain matters here - that's the one BD bots run
+            if (brains.IndexOf("PMC", StringComparison.OrdinalIgnoreCase) < 0) continue;
+
+            shown++;
+            Plugin.LogSource.LogWarning(
+                $"[BrainDump] id={Stringify(Read(t, info, "customLayerId"))} "
+                + $"type={Stringify(Read(t, info, "customLayerType"))} "
+                + $"prio={Stringify(Read(t, info, "customLayerPriority"))} "
+                + $"brains={brains} "
+                + $"roles={Stringify(Read(t, info, "CustomLayerRoles") ?? Read(t, info, "roles"))}");
+        }
+        Plugin.LogSource.LogWarning($"[BrainDump] {shown} PMC-brain layer(s) of {total} registered total");
+    }
+
+    internal static Type FindType(string fullName)
     {
         foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
         {
@@ -89,51 +113,23 @@ internal class SainBrainDumpPatch : ModulePatch
         return null;
     }
 
-    private static object ReadMember(Type type, object instance, string name)
+    internal static object Read(Type type, object instance, string name)
     {
         try
         {
-            PropertyInfo prop = type.GetProperty(name, Any);
-            if (prop != null && prop.CanRead) return prop.GetValue(instance);
-            FieldInfo field = type.GetField(name, Any);
-            if (field != null) return field.GetValue(instance);
+            PropertyInfo p = type.GetProperty(name, Any);
+            if (p != null && p.CanRead) return p.GetValue(instance);
+            FieldInfo f = type.GetField(name, Any);
+            if (f != null) return f.GetValue(instance);
+            // auto-property backing field, as LayerInfo stores them
+            FieldInfo backing = type.GetField($"<{name}>k__BackingField", Any);
+            if (backing != null) return backing.GetValue(instance);
         }
         catch { }
         return null;
     }
 
-    // A registry entry is likely a KeyValuePair or a wrapper object; print whatever
-    // readable members it exposes rather than assuming a shape.
-    private static string Describe(object entry)
-    {
-        if (entry == null) return "(null)";
-
-        var sb = new StringBuilder();
-        Type t = entry.GetType();
-        sb.Append(t.Name).Append(" { ");
-
-        foreach (PropertyInfo p in t.GetProperties(BindingFlags.Instance | BindingFlags.Public))
-        {
-            if (p.GetIndexParameters().Length > 0) continue;
-            sb.Append(p.Name).Append('=').Append(Stringify(SafeGet(() => p.GetValue(entry)))).Append(", ");
-        }
-        foreach (FieldInfo f in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-        {
-            sb.Append(f.Name).Append('=').Append(Stringify(SafeGet(() => f.GetValue(entry)))).Append(", ");
-        }
-
-        return sb.Append('}').ToString();
-    }
-
-    private static object SafeGet(Func<object> get)
-    {
-        try { return get(); }
-        catch (Exception e) { return $"<{e.GetType().Name}>"; }
-    }
-
-    // Collections print as their contents - the brain-name and role lists are the whole
-    // point of this dump, and "System.Collections.Generic.List`1[...]" tells us nothing.
-    private static string Stringify(object value)
+    internal static string Stringify(object value)
     {
         if (value == null) return "null";
         if (value is string s) return s;
@@ -152,5 +148,70 @@ internal class SainBrainDumpPatch : ModulePatch
         }
 
         return value.ToString();
+    }
+}
+
+// Polls for Black Division / Wedge bots and reports each one once.
+internal class SainBotProbe : MonoBehaviour
+{
+    private static readonly HashSet<int> BdRoles = new HashSet<int>
+    {
+        848420, 848421, 848422, 848423, 848424, 848426,
+    };
+
+    private readonly HashSet<string> _reported = new HashSet<string>();
+    private float _next;
+
+    private void Update()
+    {
+        if (Time.time < _next) return;
+        _next = Time.time + 5f;
+
+        try
+        {
+            var world = Singleton<GameWorld>.Instance;
+            if (world?.AllAlivePlayersList == null) return;
+
+            Type sainBotComponent = SainBrainDumpPatch.FindType("SAIN.Components.BotComponent");
+
+            foreach (Player player in world.AllAlivePlayersList)
+            {
+                if (player == null || !player.AIData.IsAI) continue;
+
+                int role = (int)player.Profile.Info.Settings.Role;
+                if (!BdRoles.Contains(role)) continue;
+
+                string id = player.ProfileId;
+                if (!_reported.Add(id)) continue;
+
+                BotOwner bot = player.AIData.BotOwner;
+                string brain = "?";
+                try { brain = bot?.Brain?.BaseBrain?.ShortName() ?? "?"; } catch { }
+
+                string activeLayer = "?";
+                try { activeLayer = DrakiaXYZ.BigBrain.Brains.BrainManager.GetActiveLayerName(bot) ?? "(none)"; }
+                catch (Exception e) { activeLayer = $"<{e.GetType().Name}>"; }
+
+                string sain = "SAIN-type-not-found";
+                if (sainBotComponent != null)
+                {
+                    try
+                    {
+                        Component c = bot != null ? bot.gameObject.GetComponent(sainBotComponent) : null;
+                        sain = c != null ? "ATTACHED" : "MISSING";
+                    }
+                    catch (Exception e) { sain = $"<{e.GetType().Name}>"; }
+                }
+
+                Plugin.LogSource.LogWarning(
+                    $"[BotProbe] role={player.Profile.Info.Settings.Role} brain='{brain}' "
+                    + $"activeLayer='{activeLayer}' sainComponent={sain}");
+            }
+        }
+        catch (Exception e)
+        {
+            Plugin.LogSource.LogWarning($"[BotProbe] failed: {e.Message}");
+            enabled = false;
+        }
     }
 }

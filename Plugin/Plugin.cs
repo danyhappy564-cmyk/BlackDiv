@@ -30,6 +30,9 @@ namespace BlackDiv
             //new BotsControllerInitPatch().Enable();
             new BDNvgPatch().Enable();
             new SainLayerReassertPatch().Enable();
+            new SainIsDisabledDiagPatch().Enable();
+            new SainAlwaysEnabledDiagPatch().Enable();
+            new SainExcludeByTypeDiagPatch().Enable();
 
             var bdEnums = new List<int> { 848420, 848421, 848422, 848423, 848424, 848426 }
                 .ConvertAll(x => (WildSpawnType)x);

@@ -8,40 +8,46 @@
     <LangVersion>latest</LangVersion>
     <Configurations>Debug;Release</Configurations>
     <RootNamespace>BlackDiv</RootNamespace>
+    <!-- overridable per-machine with -p:SptRoot=... (or an SptRoot environment
+         variable) - was a set of relative ..\..\..\ paths tied to one specific
+         folder depth, so a checkout anywhere else couldn't resolve the game
+         assemblies at all. -->
+    <SptRoot Condition="'$(SptRoot)' == ''">E:\SPT 4.0.10</SptRoot>
   </PropertyGroup>
-  
+
   <ItemGroup>
 		<Reference Include="Assembly-CSharp">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
 		</Reference>
 		<Reference Include="MoreBotsPrepatch">
 		  <HintPath>..\Reference\MoreBotsPrepatch.dll</HintPath>
 		</Reference>
 		<Reference Include="spt-common">
-		  <HintPath>..\..\..\BepInEx\plugins\spt\spt-common.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\spt\spt-common.dll</HintPath>
 		</Reference>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>$(SptRoot)\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>$(SptRoot)\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
-      <HintPath>..\..\..\BepInEx\core\Mono.Cecil.dll</HintPath>
+      <HintPath>$(SptRoot)\BepInEx\core\Mono.Cecil.dll</HintPath>
     </Reference>
 		<Reference Include="Newtonsoft.Json">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
 		</Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)\..\..\..\BepInEx\patchers\$(TargetFileName)&quot;" />
+    <MakeDir Directories="$(SptRoot)\BepInEx\patchers" />
+    <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;$(SptRoot)\BepInEx\patchers\$(TargetFileName)&quot;" />
   </Target>
 
 </Project>

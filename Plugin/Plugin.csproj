@@ -8,6 +8,11 @@
     <LangVersion>latest</LangVersion>
 	<Configurations>Debug;Release</Configurations>
 	<RootNamespace>BlackDiv</RootNamespace>
+	<!-- overridable per-machine with -p:SptRoot=... (or an SptRoot environment
+	     variable) - was a set of relative ..\..\..\ paths tied to one specific
+	     folder depth, so a checkout anywhere else couldn't resolve the game
+	     assemblies at all. -->
+	<SptRoot Condition="'$(SptRoot)' == ''">E:\SPT 4.0.10</SptRoot>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,94 +21,94 @@
 
 	<ItemGroup>
 		<Reference Include="0Harmony">
-		  <HintPath>..\..\..\BepInEx\core\0Harmony.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\core\0Harmony.dll</HintPath>
 		</Reference>
 		<Reference Include="Assembly-CSharp">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll</HintPath>
 		</Reference>
 		<Reference Include="DrakiaXYZ-BigBrain">
-		  <HintPath>..\..\plugins\DrakiaXYZ-BigBrain.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\DrakiaXYZ-BigBrain.dll</HintPath>
 		</Reference>
 		<Reference Include="MoreBotsPlugin">
 		  <HintPath>..\Reference\MoreBotsAPI\MoreBotsPlugin.dll</HintPath>
 		</Reference>
 		<Reference Include="SAIN">
-		  <HintPath>..\..\plugins\SAIN\SAIN.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\SAIN\SAIN.dll</HintPath>
 		</Reference>
 		<Reference Include="spt-custom">
-		  <HintPath>..\..\..\BepInEx\plugins\spt\spt-custom.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\spt\spt-custom.dll</HintPath>
 		</Reference>
 		<Reference Include="spt-singleplayer">
-		  <HintPath>..\..\..\BepInEx\plugins\spt\spt-singleplayer.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\spt\spt-singleplayer.dll</HintPath>
 		</Reference>
 		<Reference Include="spt-common">
-		  <HintPath>..\..\..\BepInEx\plugins\spt\spt-common.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\spt\spt-common.dll</HintPath>
 		</Reference>
 		<Reference Include="spt-reflection">
-		  <HintPath>..\..\..\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\spt\spt-reflection.dll</HintPath>
 		</Reference>
 		<Reference Include="AnimationSystem.Types">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\AnimationSystem.Types.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\AnimationSystem.Types.dll</HintPath>
 		</Reference>
 		<Reference Include="BepInEx">
-		  <HintPath>..\..\..\BepInEx\core\BepInEx.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\core\BepInEx.dll</HintPath>
 		</Reference>
 		<Reference Include="bsg.console.core">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\bsg.console.core.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\bsg.console.core.dll</HintPath>
 		</Reference>
 		<Reference Include="Comfort">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Comfort.dll</HintPath>
 		</Reference>
 		<Reference Include="Comfort.Unity">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll</HintPath>
 		</Reference>
 		<Reference Include="DissonanceVoip">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\DissonanceVoip.dll</HintPath>
 		</Reference>
 		<Reference Include="ItemComponent.Types">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\ItemComponent.Types.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\ItemComponent.Types.dll</HintPath>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
 		</Reference>
 		<Reference Include="Sirenix.Serialization">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Sirenix.Serialization.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Sirenix.Serialization.dll</HintPath>
 		</Reference>
 		<Reference Include="Unity.TextMeshPro">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\Unity.TextMeshPro.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.AIModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.AIModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.AIModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.AnimationModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.AssetBundleModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.AudioModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.AudioModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.CoreModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.IMGUIModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.InputLegacyModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.PhysicsModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.TextRenderingModule">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
 		</Reference>
 		<Reference Include="UnityEngine.UI">
-		  <HintPath>..\..\..\EscapeFromTarkov_Data\Managed\UnityEngine.UI.dll</HintPath>
+		  <HintPath>$(SptRoot)\EscapeFromTarkov_Data\Managed\UnityEngine.UI.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 
@@ -115,7 +120,8 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)\..\..\..\BepInEx\plugins\BlackDiv\$(TargetFileName)&quot;" />
+	  <MakeDir Directories="$(SptRoot)\BepInEx\plugins\BlackDiv" />
+	  <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;$(SptRoot)\BepInEx\plugins\BlackDiv\$(TargetFileName)&quot;" />
 	</Target>
 
 </Project>

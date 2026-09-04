@@ -31,6 +31,11 @@ namespace BlackDiv.Patches;
 // BigBrainHandler init runs afterwards and rebuilds the exclusions, dropping it. Hence
 // re-applying at raid start.
 //
+// CONFIRMED IN A LIVE RAID after this fix: blackDivIb and bossWedge both report
+// activeLayer 'SAIN : Combat Layer' and 'SAIN : Avoid Threat', Icebreaker's own layers
+// (IceCrewRush / IceCrewHold / WedgeRooms) still take their turns alongside, the ExUsec
+// brain shows zero exclusions from us, and PersonActiveClass NREs went from ~4000 to 0.
+//
 // SCOPE IS THE SAFETY STORY. An earlier attempt at the removal passed brains
 // ["PMC", "ExUsec"] and stripped the ExUsec brain - the one REAL Rogues run on - leaving
 // them on PatrolFollower to trail each other around the ship in a frozen clump. The dump

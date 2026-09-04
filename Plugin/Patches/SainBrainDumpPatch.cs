@@ -13,22 +13,19 @@ namespace BlackDiv.Patches;
 // READ-ONLY DIAGNOSTIC. Nothing here writes state: it reads BigBrain's registry and asks
 // each live bot what it already is. No layer is added, removed or toggled.
 //
-// Where we are. SainBrainLayerPatch calls SAIN's AddCustomLayersToBrainsAndRoles(["PMC"],
-// BD roles) at raid start, logs success, throws nothing - and BD/Wedge still show the
-// vanilla "Pmc" layer. The first dump answered one question already: BigBrain keys its
-// registry by an auto-incrementing int id (9000, 9001, ...), not by layer type, so a
-// second registration of an already-registered type is NOT dropped. That kills the
-// "duplicate got ignored" theory and leaves two candidates:
+// The first two dumps settled the diagnosis: BigBrain keys CustomLayers by an
+// auto-incrementing id (so duplicate type registrations are kept, not dropped), SAIN's
+// layers were already registered for all six BD roles on the "PMC" brain, and every BD
+// bot had a SAIN BotComponent attached. What actually held them was priority - SAIN's
+// combat layers sit at 20/22 while vanilla Pmc / AdvAssaultTarget / AssaultHaveEnemy sit
+// far above, and SAIN's design is to REMOVE those rather than outrank them.
 //
-//   A) the layer is registered but BigBrain's role filter still doesn't match our bots
-//   B) the layer matches, but SAIN's own IsActive() bails because the bot has no SAIN
-//      BotComponent (CombatSoloLayer.IsActive() = GetBotComponent() && decision != None)
-//
-// So this prints both halves:
-//   - every registered LayerInfo whose brain list mentions PMC, with its type, priority,
-//     brains and roles (does 848420-848426 appear?)
-//   - for each live Black Division/Wedge bot: its brain name, its current active layer,
-//     and whether a SAIN BotComponent is attached at all
+// So this now verifies the fix rather than hunting for it:
+//   - PMC-brain layer registrations (type, priority, brains, roles)
+//   - PMC-brain EXCLUSIONS - the vanilla names excluded, and for which roles. This is the
+//     half that has to survive SAIN's own init for anything to change.
+//   - each live BD/Wedge bot, reported whenever its active layer changes, so we see what
+//     wins in a real fight instead of a single patrol-time sample
 internal class SainBrainDumpPatch : ModulePatch
 {
     private const BindingFlags Any =
@@ -101,6 +98,33 @@ internal class SainBrainDumpPatch : ModulePatch
                 + $"roles={Stringify(Read(t, info, "CustomLayerRoles") ?? Read(t, info, "roles"))}");
         }
         Plugin.LogSource.LogWarning($"[BrainDump] {shown} PMC-brain layer(s) of {total} registered total");
+
+        // The exclusions are the half that decides whether SAIN's low-priority combat
+        // layers are ever reachable, so print them too: a vanilla name excluded for our
+        // roles is what "the fix took" looks like.
+        object excludes = Read(brainManager, null, "ExcludeLayersReadOnly") ?? Read(brainManager, null, "ExcludeLayers");
+        if (excludes is IEnumerable exEntries)
+        {
+            int exShown = 0;
+            foreach (object kvp in exEntries)
+            {
+                object info = Read(kvp.GetType(), kvp, "Value") ?? kvp;
+                Type t = info.GetType();
+                string brains = Stringify(Read(t, info, "ExcludeLayerBrains") ?? Read(t, info, "brainNames"));
+                if (brains.IndexOf("PMC", StringComparison.OrdinalIgnoreCase) < 0) continue;
+
+                exShown++;
+                Plugin.LogSource.LogWarning(
+                    $"[BrainDump] EXCLUDE name={Stringify(Read(t, info, "excludeLayerName"))} "
+                    + $"brains={brains} "
+                    + $"roles={Stringify(Read(t, info, "ExcludeLayerRoles") ?? Read(t, info, "roles"))}");
+            }
+            Plugin.LogSource.LogWarning($"[BrainDump] {exShown} PMC-brain exclusion(s)");
+        }
+        else
+        {
+            Plugin.LogSource.LogWarning("[BrainDump] exclusion collection unreadable");
+        }
     }
 
     internal static Type FindType(string fullName)
@@ -159,13 +183,14 @@ internal class SainBotProbe : MonoBehaviour
         848420, 848421, 848422, 848423, 848424, 848426,
     };
 
-    private readonly HashSet<string> _reported = new HashSet<string>();
+    private readonly Dictionary<string, string> _lastLayer = new Dictionary<string, string>();
+    private readonly Dictionary<string, int> _reportCount = new Dictionary<string, int>();
     private float _next;
 
     private void Update()
     {
         if (Time.time < _next) return;
-        _next = Time.time + 5f;
+        _next = Time.time + 1.5f;
 
         try
         {
@@ -182,8 +207,6 @@ internal class SainBotProbe : MonoBehaviour
                 if (!BdRoles.Contains(role)) continue;
 
                 string id = player.ProfileId;
-                if (!_reported.Add(id)) continue;
-
                 BotOwner bot = player.AIData.BotOwner;
                 string brain = "?";
                 try { brain = bot?.Brain?.BaseBrain?.ShortName() ?? "?"; } catch { }
@@ -202,6 +225,16 @@ internal class SainBotProbe : MonoBehaviour
                     }
                     catch (Exception e) { sain = $"<{e.GetType().Name}>"; }
                 }
+
+                // only speak up when the picture changes, and cap per bot so a long
+                // raid cannot turn this into a log flood
+                _lastLayer.TryGetValue(id, out string previous);
+                if (previous == activeLayer) continue;
+                _lastLayer[id] = activeLayer;
+
+                _reportCount.TryGetValue(id, out int seen);
+                if (seen >= 8) continue;
+                _reportCount[id] = seen + 1;
 
                 Plugin.LogSource.LogWarning(
                     $"[BotProbe] role={player.Profile.Info.Settings.Role} brain='{brain}' "

@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
-    <AssemblyName>BlackDiv</AssemblyName>
+    <!-- was "BlackDiv", same as Plugin.csproj's AssemblyName - two projects in one
+         solution sharing an AssemblyName is what NuGet's restore graph chokes on
+         with "Ambiguous project name 'BlackDiv'" (Plugin ProjectReferences this
+         project, so restore needs to tell them apart). The output filename doesn't
+         matter to BepInEx's prepatcher (it just loads every dll under
+         BepInEx\patchers), so this is safe to rename. -->
+    <AssemblyName>BlackDivPrepatch</AssemblyName>
     <Description>BlackDiv Prepatch needed to add custom bots to the client.</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>

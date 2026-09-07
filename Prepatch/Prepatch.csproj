@@ -3,14 +3,19 @@
   <PropertyGroup>
     <!-- netstandard2.1 is upstream's 4.1 move (was net471) -->
     <TargetFramework>netstandard2.1</TargetFramework>
-    <!-- Do NOT rename AssemblyName below to differ from Plugin.csproj's. It was
-         briefly changed to "BlackDivPrepatch" to dodge a NuGet "Ambiguous project
-         name 'BlackDiv'" restore error, but Plugin ProjectReferences this project
-         with the default Private=true, so a differing name makes MSBuild drop a
-         SECOND dll into the plugin's output folder instead of the two collapsing
-         onto one filename - which changes what actually gets deployed. If the
-         restore error comes back, fix it in the restore, not here. -->
+    <!-- Do NOT rename AssemblyName to differ from Plugin.csproj's. It was briefly
+         changed to "BlackDivPrepatch" to dodge a NuGet "Ambiguous project name
+         'BlackDiv'" restore error, but Plugin ProjectReferences this project with the
+         default Private=true, so a differing name makes MSBuild drop a SECOND dll into
+         the plugin's output folder instead of the two collapsing onto one filename -
+         which changes what actually gets deployed.
+         The restore error is real and comes back on a clean obj/; PackageId below is
+         the actual fix. It defaults to $(AssemblyName), which is what made two
+         projects claim the name 'BlackDiv' during restore - setting it explicitly
+         gives NuGet distinct identities while the OUTPUT filename stays BlackDiv.dll
+         for both. Reproduce with: rm -rf */obj && dotnet restore BlackDiv.sln -->
     <AssemblyName>BlackDiv</AssemblyName>
+    <PackageId>BlackDiv.Prepatch</PackageId>
     <Description>BlackDiv Prepatch needed to add custom bots to the client.</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>

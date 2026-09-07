@@ -45,6 +45,28 @@ dotnet build BlackDiv.sln
 4.0 시절 것이라 최신 `MoreBotsServer.Interop` 타입이 없습니다 — 원작이 4.1에서 참조를
 설치본 쪽으로 옮긴 이유입니다. 빌드에는 안 쓰이니 그대로 둡니다.
 
+원작 1.3.x부터 `Server` 프로젝트도 솔루션에 들어 있어서, `BlackDiv.sln` 하나로 세
+프로젝트가 같이 빌드됩니다.
+
+### `Ambiguous project name 'BlackDiv'`
+
+`obj/`가 비어 있는 상태에서 복원하면 나던 오류입니다. `Plugin`과 `Prepatch`가 **의도적으로**
+같은 `AssemblyName`(`BlackDiv`)을 쓰는데, SDK 스타일 프로젝트에서 `PackageId`가
+`$(AssemblyName)`을 기본값으로 따라가는 바람에 두 프로젝트가 복원 그래프에서 같은 이름을
+주장하게 됩니다. 그러면 `project.assets.json`이 아예 안 만들어져서 `Plugin` 빌드도 같이
+죽습니다 (`NETSDK1004`).
+
+`PackageId`를 각각 `BlackDiv.Plugin` / `BlackDiv.Prepatch`로 명시해서 해결했습니다.
+**`AssemblyName`은 둘 다 `BlackDiv` 그대로**라 출력 파일명은 안 바뀝니다 — 여기서
+`AssemblyName`을 갈라놓으면 `Plugin`의 출력 폴더에 DLL이 하나 더 떨어져서 실제 배포
+구성이 달라집니다. 패키징은 안 하니 `PackageId`는 그 외에는 아무 영향이 없습니다.
+
+재현/확인:
+
+```
+rm -rf */obj && dotnet restore BlackDiv.sln
+```
+
 ---
 
 ## 변경점
@@ -157,3 +179,11 @@ dotnet build BlackDiv.sln
 - 검증: `Server` 프로젝트를 실제 SPT 4.1 패키지 + 최신 `MoreBotsServer`로 빌드해
   에러 0 확인. `Plugin`/`Prepatch`는 EFT 어셈블리가 필요해서 여기서는 구문 파싱
   (16개 파일, 에러 0)과 심볼 대조까지만 — 실기 빌드 필요
+
+- **`Ambiguous project name 'BlackDiv'` 복원 오류 수정.** `obj/`를 지우고 복원하면
+  재현됩니다(이 컨테이너에서 재현 → 수정 → 3개 프로젝트 전부 복원 성공까지 확인).
+  `Plugin`과 `Prepatch`가 같은 `AssemblyName`을 쓰는데 `PackageId`가 그걸 기본값으로
+  따라가서 생기는 충돌이라, `PackageId`만 각각 `BlackDiv.Plugin`/`BlackDiv.Prepatch`로
+  명시했습니다. `AssemblyName`은 둘 다 `BlackDiv` 유지 — 출력 파일명과 배포 구성은
+  그대로입니다. 09/04에 "복원 쪽에서 해결할 것"이라고만 적어두고 미뤄뒀던 것을
+  실제로 해결한 것입니다

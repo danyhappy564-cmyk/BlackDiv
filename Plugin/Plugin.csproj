@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>BlackDiv</AssemblyName>
+    <!-- NuGet identity, NOT the output filename. PackageId defaults to $(AssemblyName)
+         in SDK-style projects, and Prepatch deliberately shares AssemblyName 'BlackDiv'
+         with this project - so without these two lines both present themselves to
+         restore as 'BlackDiv' and `dotnet restore BlackDiv.sln` dies with
+         "Ambiguous project name 'BlackDiv'" before either project.assets.json is
+         written. Nothing here is packed, so PackageId is otherwise inert. -->
+    <PackageId>BlackDiv.Plugin</PackageId>
     <Description>Plugin for BlackDiv.</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>

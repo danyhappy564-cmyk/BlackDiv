@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
-    <!-- Do NOT rename this to differ from Plugin.csproj's AssemblyName. It was
+    <!-- netstandard2.1 is upstream's 4.1 move (was net471) -->
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <!-- Do NOT rename AssemblyName below to differ from Plugin.csproj's. It was
          briefly changed to "BlackDivPrepatch" to dodge a NuGet "Ambiguous project
          name 'BlackDiv'" restore error, but Plugin ProjectReferences this project
          with the default Private=true, so a differing name makes MSBuild drop a
@@ -19,7 +20,7 @@
          variable) - was a set of relative ..\..\..\ paths tied to one specific
          folder depth, so a checkout anywhere else couldn't resolve the game
          assemblies at all. -->
-    <SptRoot Condition="'$(SptRoot)' == ''">E:\SPT 4.0.10</SptRoot>
+    <SptRoot Condition="'$(SptRoot)' == ''">E:\SPT 4.1</SptRoot>
   </PropertyGroup>
 
   <ItemGroup>

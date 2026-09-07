@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net471</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>BlackDiv</AssemblyName>
     <Description>Plugin for BlackDiv.</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -12,7 +12,7 @@
 	     variable) - was a set of relative ..\..\..\ paths tied to one specific
 	     folder depth, so a checkout anywhere else couldn't resolve the game
 	     assemblies at all. -->
-	<SptRoot Condition="'$(SptRoot)' == ''">E:\SPT 4.0.10</SptRoot>
+	<SptRoot Condition="'$(SptRoot)' == ''">E:\SPT 4.1</SptRoot>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,7 +30,7 @@
 		  <HintPath>$(SptRoot)\BepInEx\plugins\DrakiaXYZ-BigBrain.dll</HintPath>
 		</Reference>
 		<Reference Include="MoreBotsPlugin">
-		  <HintPath>..\Reference\MoreBotsAPI\MoreBotsPlugin.dll</HintPath>
+		  <HintPath>$(SptRoot)\BepInEx\plugins\MoreBotsPlugin\MoreBotsPlugin.dll</HintPath>
 		</Reference>
 		<Reference Include="SAIN">
 		  <HintPath>$(SptRoot)\BepInEx\plugins\SAIN\SAIN.dll</HintPath>
@@ -112,16 +112,8 @@
 		</Reference>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Behavior\Layers\" />
-	  <Folder Include="Components\" />
-	  <Folder Include="Controllers\" />
-	  <Folder Include="Models\" />
-	</ItemGroup>
-
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 	  <MakeDir Directories="$(SptRoot)\BepInEx\plugins\BlackDiv" />
 	  <Exec Command="copy /Y &quot;$(TargetPath)&quot; &quot;$(SptRoot)\BepInEx\plugins\BlackDiv\$(TargetFileName)&quot;" />
 	</Target>
-
 </Project>
